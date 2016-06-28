@@ -4,6 +4,8 @@ import crane.tools.EsHelper;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -12,8 +14,10 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +78,23 @@ public class EsToolController {
             }
         }
         return list;
+    }
+
+    @RequestMapping("/mapping")
+    public Object mapping(@RequestParam(value = "param", defaultValue = "", required = false) String param) throws IOException {
+        XContentBuilder builder = XContentFactory.jsonBuilder()
+                .startObject()
+                .startObject("hl");//type
+
+        builder.startObject("_all").field("analyzer", "ik_max_word").field("search_analyzer", "ik_max_word").field("include_in_all", "true").endObject();
+
+        builder.startObject("properties");
+        builder.startObject("content").field("type", "string").field("store", "false").field("term_vector", "with_positions_offsets").field("analyzer", "ik_max_word").field("search_analyzer", "ik_max_word").field("include_in_all", "true").endObject();
+        builder.endObject();
+
+        builder.endObject();
+        builder.endObject();
+        return null;
     }
 }
 
