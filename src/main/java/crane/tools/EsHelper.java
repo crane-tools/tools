@@ -135,37 +135,6 @@ public class EsHelper {
     }
 
     /**
-     * 新增一条数据
-     *
-     * @param indice          索引名
-     * @param type            类型名
-     * @param id              数据id
-     * @param xContentBuilder 数据信息
-     * @return 新增响应结果
-     */
-    public IndexResponse insert(String indice, String type, String id, XContentBuilder xContentBuilder) throws IOException {
-        if (xContentBuilder == null)
-            return null;
-        return es_client.prepareIndex(indice, type, id).setSource(xContentBuilder).execute().actionGet();
-    }
-
-    /**
-     * 新增一条数据
-     *
-     * @param indice     索引名
-     * @param type       类型名
-     * @param id         数据id
-     * @param jsonString 要插入数据的json字符串
-     * @return 新增响应结果
-     */
-    @Deprecated
-    public IndexResponse insert(String indice, String type, String id, final String jsonString) throws IOException {
-        if (StringUtils.isBlank(jsonString))
-            return null;
-        return es_client.prepareIndex(indice, type, id).setSource(JSONObject.parseObject(jsonString)).execute().actionGet();
-    }
-
-    /**
      * 批量新增
      *
      * @param indice 索引名
@@ -188,30 +157,6 @@ public class EsHelper {
     }
 
     /**
-     * 批量新增
-     *
-     * @param indice 索引名
-     * @param type   类型名
-     * @param data   新增的数据,key为数据id,value为该条数据对应的XContentBuilder
-     * @return 批量插入结果
-     * @throws IOException
-     */
-    public BulkResponse bulkUpdateSet(String indice, String type, Map<String, Map<String, Set<Object>>> data) throws IOException {
-        if (data == null || data.keySet().size() <= 0)
-            return null;
-        BulkRequestBuilder bulkRequestBuilder = es_client.prepareBulk();
-        Set<String> ids = data.keySet();
-        for (String id : ids) {
-            for (String inid : data.get(id).keySet()) {
-                UpdateRequestBuilder builder = es_client.prepareUpdate(indice, type, id);
-                builder.setDoc(inid, data.get(id).get(inid));
-                bulkRequestBuilder.add(builder);
-            }
-        }
-        return bulkRequestBuilder.get();
-    }
-
-    /**
      * 根据id更新一条文档的指定列数据
      *
      * @param indiceName 索引名称
@@ -228,44 +173,27 @@ public class EsHelper {
     }
 
     /**
-     * 根据id更新一条文档的多列数据
+     * 批量新增
      *
-     * @param indiceName 索引名称
-     * @param type       索引类型
-     * @param id         数据id
-     * @param updates    要更新的额field-value集合,不更新的信息不用设置
-     * @return 更新结果
+     * @param indice 索引名
+     * @param type   类型名
+     * @param data   要修改的数据,<id,<field,value>>
+     * @return 批量修改结果
+     * @throws IOException
      */
-    public UpdateResponse updateMultiFields(String indiceName, String type, String id, HashMap<String, Object> updates) {
-        if (updates == null || updates.size() <= 0) {
+    public BulkResponse bulkUpdateSet(String indice, String type, Map<String, Map<String, Object>> data) throws IOException {
+        if (data == null || data.keySet().size() <= 0)
             return null;
+        BulkRequestBuilder bulkRequestBuilder = es_client.prepareBulk();
+        Set<String> ids = data.keySet();
+        for (String id : ids) {
+            for (String inid : data.get(id).keySet()) {
+                UpdateRequestBuilder builder = es_client.prepareUpdate(indice, type, id);
+                builder.setDoc(inid, data.get(id).get(inid));
+                bulkRequestBuilder.add(builder);
+            }
         }
-        UpdateRequestBuilder updateRequestBuilder = es_client.prepareUpdate(indiceName, type, id);
-        Set<String> fieldNames = updates.keySet();
-        for (String key : fieldNames) {
-            updateRequestBuilder.setDoc(key, updates.get(key));
-        }
-        return es_client.update(updateRequestBuilder.request()).actionGet();
-    }
-
-    /**
-     * 获取SearchRequestBuilder
-     *
-     * @param indices 索引名称
-     * @return 查询结果
-     */
-    public SearchRequestBuilder getSearchRequestBuilder(String... indices) {
-        return es_client.prepareSearch(indices);
-    }
-
-    /**
-     * elasticsearch 执行查询
-     *
-     * @param requestBuilder 查询请求构造器
-     * @return 查询结果
-     */
-    public SearchResponse search(SearchRequestBuilder requestBuilder) {
-        return requestBuilder.execute().actionGet();
+        return bulkRequestBuilder.get();
     }
 
     /**
@@ -289,7 +217,7 @@ public class EsHelper {
      * @param idList     要删除的数据id集合
      * @return 批量删除响应结果
      */
-    public BulkResponse delete(String indiceName, String type, List<String> idList) {
+    public BulkResponse bulkDelete(String indiceName, String type, List<String> idList) {
         if (idList == null || idList.size() <= 0)
             return null;
         BulkRequestBuilder bulkRequestBuilder = es_client.prepareBulk();
@@ -298,6 +226,25 @@ public class EsHelper {
             bulkRequestBuilder.add(deleteRequestBuilder);
         }
         return bulkRequestBuilder.get();
+    }
+
+    /**
+     * 获取SearchRequestBuilder
+     *
+     * @return 查询结果
+     */
+    public SearchRequestBuilder getSearchRequestBuilder(String indice, String type) {
+        return es_client.prepareSearch().setIndices(indice).setTypes(type);
+    }
+
+    /**
+     * elasticsearch 执行查询
+     *
+     * @param requestBuilder 查询请求构造器
+     * @return 查询结果
+     */
+    public SearchResponse search(SearchRequestBuilder requestBuilder) {
+        return requestBuilder.execute().actionGet();
     }
 
     /**

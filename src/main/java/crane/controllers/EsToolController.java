@@ -34,17 +34,17 @@ public class EsToolController {
 
     @RequestMapping("/search")
     public Object search() {
-        SearchRequestBuilder searchRequestBuilder = esHelper.getSearchRequestBuilder().setIndices(indiceName).setTypes(typeName);
+        SearchRequestBuilder searchRequestBuilder = esHelper.getSearchRequestBuilder(indiceName, typeName);
 //        if (false) {
 //            searchRequestBuilder.setQuery(new IdsQueryBuilder());
 //        } else {
 //            searchRequestBuilder.setQuery(new BoolQueryBuilder());
 //        }
         searchRequestBuilder.setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("content", "中国美国")));
-//        searchRequestBuilder = searchRequestBuilder.addSort("order", SortOrder.ASC);//一级排序
-//        searchRequestBuilder = searchRequestBuilder.addSort("order2", SortOrder.DESC);//二级排序
+        searchRequestBuilder = searchRequestBuilder.addSort("order", SortOrder.ASC);//一级排序
+        searchRequestBuilder = searchRequestBuilder.addSort("order2", SortOrder.DESC);//二级排序
         searchRequestBuilder = searchRequestBuilder.setFrom(0).setSize(10);
-        // 设置是否按查询匹配度排序 如果没有设置上面的自定义排序则使用匹配度排序
+        // 设置是否按查询匹配度排序 如果没有设置上面的自定义排序则使用匹配度排序,如果设置了自定义排序则匹配度排序无效
         searchRequestBuilder.setExplain(true);
         //设置高亮显示
         searchRequestBuilder.addHighlightedField("content");
