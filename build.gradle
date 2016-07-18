@@ -33,5 +33,6 @@ dependencies {
     compile('commons-io:commons-io:2.4')
     compile('com.google.guava:guava:19.0')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('com.qcloud:qcloud-sdk:2.1.5')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
