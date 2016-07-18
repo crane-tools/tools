@@ -37,6 +37,11 @@
     });
 
     $('input[name=FileContent]').change(function () {
+        var file = this.files[0];
+        name = file.name;
+        size = file.size;
+        type = file.type;
+        console.log("File name:" + name + ";size:" + size + "(" + (size / 1024 / 1024) + "M);type:" + type)
         initUploadForm();
     });
 
@@ -128,6 +133,13 @@
                 type: 'post',
                 url: url,
                 dataType: 'json',
+                xhr: function () { // custom xhr
+                    myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) { // check if upload property exists
+                        myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // for handling the progress of the upload
+                    }
+                    return myXhr;
+                },
                 success: function (ret) {
                     $('#downloadUrl').html(ret.data.download_url);
                     $('#fileid').text(ret.data.fileid);
@@ -142,6 +154,12 @@
             // pass options to ajaxForm
             $('#uploadForm').ajaxForm(options);
         });
+    }
+    function progressHandlingFunction(e) {
+        if (e.lengthComputable) {
+            console.log("loaded:" + e.loaded + ";total:" + e.total)
+//            $('progress').attr({value:e.loaded,max:e.total});
+        }
     }
 </script>
 </body>
