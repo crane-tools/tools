@@ -1,9 +1,7 @@
 package crane.tools;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.carrotsearch.hppc.ObjectLookupContainer;
-import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
 import org.elasticsearch.action.admin.indices.alias.exists.AliasesExistRequestBuilder;
@@ -36,7 +34,6 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
