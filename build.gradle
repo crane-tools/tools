@@ -34,5 +34,6 @@ dependencies {
     compile('com.google.guava:guava:19.0')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('com.qcloud:qcloud-sdk:2.1.5')
+    compile "net.sourceforge.javacsv:javacsv:2.0"
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
