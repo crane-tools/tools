@@ -17,6 +17,8 @@ import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.MultiSearchRequestBuilder;
+import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequestBuilder;
@@ -244,6 +246,22 @@ public class EsHelper {
         return requestBuilder.execute().actionGet();
     }
 
+    public MultiSearchResponse multiSearch(SearchRequestBuilder... searchRequestBuilders) {
+        if (searchRequestBuilders == null) return null;
+        MultiSearchRequestBuilder multiSearchRequestBuilder = this.es_client.prepareMultiSearch();
+        for (SearchRequestBuilder builder : searchRequestBuilders) {
+            multiSearchRequestBuilder.add(builder);
+        }
+        return multiSearchRequestBuilder.execute().actionGet();
+    }
+    public MultiSearchResponse multiSearch(List<SearchRequestBuilder> searchRequestBuilders) {
+        if (searchRequestBuilders == null) return null;
+        MultiSearchRequestBuilder multiSearchRequestBuilder = this.es_client.prepareMultiSearch();
+        for (SearchRequestBuilder builder : searchRequestBuilders) {
+            multiSearchRequestBuilder.add(builder);
+        }
+        return multiSearchRequestBuilder.execute().actionGet();
+    }
     /**
      * 创建mapping
      *
