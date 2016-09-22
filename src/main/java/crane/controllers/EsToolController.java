@@ -1,11 +1,13 @@
 package crane.controllers;
 
 import crane.tools.EsHelper;
+import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.ExistsQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -29,9 +31,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("es")
 public class EsToolController {
-    @Value("${es.sku.indiceName}")
+    @Value("${es.crane.indiceName}")
     String indiceName;
-    @Value("${es.sku.typeName}")
+    @Value("${es.crane.typeName}")
     String typeName;
     @Autowired
     EsHelper esHelper;
@@ -94,6 +96,23 @@ public class EsToolController {
 
         builder.endObject();
         builder.endObject();
+        return null;
+    }
+
+    /**
+     * 多个查询结果会按照requestbuilder的先后顺序返回响应
+     * @return
+     */
+    @RequestMapping("/msearch")
+    public Object msearch() {
+        SearchRequestBuilder searchRequestBuilder = esHelper.getSearchRequestBuilder("skutest", "skuinfo")
+                .setQuery(QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("clientSkuId", "clientsku-43c77d5e-43d3-4aa4-8c9e-634feda5c501")));
+
+        SearchRequestBuilder searchRequestBuilder1 = esHelper.getSearchRequestBuilder("sku_test", "skuinfo")
+                .setQuery(QueryBuilders.boolQuery().must(QueryBuilders.termQuery("clientSkuId", "clientsku-4fc89d5c-0ece-4f68-ad30-ba5d4d48c6b1")));
+
+        MultiSearchResponse response = esHelper.multiSearch(searchRequestBuilder, searchRequestBuilder1);
+
         return null;
     }
 }

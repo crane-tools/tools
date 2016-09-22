@@ -10,8 +10,8 @@
 <div>
     <h2>腾讯云万象优图</h2>
     <form id="uploadForm">
-        <input type="file" name="FileContent"/>
-        <input id="subbtn" type="submit"/>
+        <input type="file" name="FileContent" accept="image/png,image/gif,image/png"/>
+        <input id="subbtn" type="submit" value="上传"/>
     </form>
 
     <div id="downloadRet">
@@ -158,7 +158,6 @@
     function progressHandlingFunction(e) {
         if (e.lengthComputable) {
             console.log("loaded:" + e.loaded + ";total:" + e.total)
-//            $('progress').attr({value:e.loaded,max:e.total});
         }
     }
 </script>
