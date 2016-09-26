@@ -85,7 +85,7 @@ public class EsOrm {
     }
 
     /**
-     * 根据jsonobject构造一个XContentBuilder
+     * 根据jsonobject构造一个XContentBuilder 用于新增数据到es
      *
      * @param jsonObject
      * @return

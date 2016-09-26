@@ -4,6 +4,7 @@ package crane.modelFields;
  * Created by crane on 16/9/23.
  * 用户信息表，保存用户信息
  */
+@Deprecated
 public class UserFields {
     public static final String ID = "id";
     /**

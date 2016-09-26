@@ -7,42 +7,153 @@ import java.io.Serializable;
  * private字段需要和field值一致
  */
 public class User implements Serializable, EsBaseModel {
+    /**
+     *
+     */
     private String id;
+    /**
+     * 登陆名
+     */
     private String userName;
+    /**
+     * 昵称
+     */
     private String nickName;
+    /**
+     * 实名
+     */
     private String realName;
+    /**
+     * 密码 MD5
+     */
     private String password;
+    /**
+     * 邮箱
+     */
     private String email;
+    /**
+     * 邮箱状态（是否认证等）1已认证
+     */
     private Long emailStatus;
+    /**
+     * 手机号码
+     */
     private String mobile;
+    /**
+     * 手机号码状态（是否认证等）
+     */
     private Long mobileStatus;
+    /**
+     * 经验值
+     */
     private Long expValue;
+    /**
+     * 性别
+     */
     private Long gender;
+    /**
+     * 角色 normal amdin
+     */
     private String role;
+    /**
+     * 签名
+     */
     private String signature;
+    /**
+     * QQ号码
+     */
     private String qq;
+    /**
+     * 微信号
+     */
     private String weChat;
+    /**
+     * 微博
+     */
     private String weiBo;
+    /**
+     * facebook
+     */
     private String faceBook;
+    /**
+     * linkedin
+     */
     private String linkedin;
+    /**
+     * 生日
+     */
     private Long birthday;
+    /**
+     * 公司
+     */
     private String company;
+    /**
+     * 职位、职业
+     */
     private String occupation;
+    /**
+     * 地址
+     */
     private String address;
+    /**
+     * 邮政编码
+     */
     private String zipCode;
+    /**
+     * 个人网址
+     */
     private String site;
+    /**
+     * 毕业学校
+     */
     private String graduateSchool;
+    /**
+     * 最高学历
+     */
     private String education;
+    /**
+     * 头像
+     */
     private String avatar;
+    /**
+     * 证件类型：身份证 护照 军官证等
+     */
     private String idcardType;
+    /**
+     * 证件号码
+     */
     private String idcardNumber;
+    /**
+     * 证件号码图片路径
+     */
     private String idcardPath;
+    /**
+     * 状态 normal frozen
+     */
     private String status;
+    /**
+     * 创建日期
+     */
     private Long createDate;
+    /**
+     * 用户来源（可能来之oauth第三方)
+     */
     private String createSource;
+    /**
+     * 最后的登陆时间
+     */
     private Long lastLoginTime;
+    /**
+     * 激活时间
+     */
     private Long activeTime;
+    /**
+     * 是否管理机构用户
+     */
     private Long isGoverner;
+    /**
+     * 是否实名认证
+     */
     private Long isNameValid;
 
     public String getId() {
