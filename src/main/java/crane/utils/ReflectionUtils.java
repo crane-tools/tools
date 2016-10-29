@@ -1,6 +1,7 @@
 package crane.utils;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,6 +31,22 @@ public class ReflectionUtils {
             }
         }
         return t;
+    }
+
+    /**
+     * 从对象获取map属性值映射
+     *
+     * @param object
+     * @return
+     */
+    public static Map<String, Object> getMap(Object object) throws IllegalAccessException {
+        Map<String, Object> result = new HashMap<String, Object>();
+        Field[] fields = object.getClass().getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            fields[i].setAccessible(true);
+            result.put(fields[i].getName(), fields[i].get(object));
+        }
+        return result;
     }
 
 //    public static void main(String[] args) {
